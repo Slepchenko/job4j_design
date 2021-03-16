@@ -16,6 +16,6 @@ env:
       notifications:
         email:
           recipients:
-            -rail.shamsemukhametov@mail.ru
+            -burunduchapo@yandex.ru
           on_success: never # default: change
           on_failure: always # default: always
