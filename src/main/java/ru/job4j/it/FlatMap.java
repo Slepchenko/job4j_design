@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 public class FlatMap<T> implements Iterator<T> {
     private final Iterator<Iterator<T>> data;
     private Iterator<T> cursor = Collections.emptyIterator();
-    private int point = 0;
 
     public FlatMap(Iterator<Iterator<T>> data) {
         this.data = data;
@@ -16,22 +15,17 @@ public class FlatMap<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-
         if (cursor == null) {
             cursor = data.next();
         }
-
-
-
         if (cursor.hasNext()) {
             return true;
         } else {
-            if (data.hasNext()) {
+            while (!cursor.hasNext() && data.hasNext()) {
                 cursor = data.next();
-                return true;
             }
+            return cursor.hasNext();
         }
-        return false;
     }
 
     @Override

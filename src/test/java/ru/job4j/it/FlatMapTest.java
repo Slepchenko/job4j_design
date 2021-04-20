@@ -76,7 +76,7 @@ public class FlatMapTest {
 
     @Test
     public void whenSeveralEmptyThenReturnFalse() {
-        Iterator<Iterator<?>> it = (Iterator<Iterator<?>>) List.of(
+        Iterator<Iterator<?>> it = List.of(
                 List.of().iterator(),
                 List.of().iterator(),
                 List.of().iterator(),
