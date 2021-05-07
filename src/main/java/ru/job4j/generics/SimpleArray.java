@@ -1,18 +1,15 @@
 package ru.job4j.generics;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 public class SimpleArray<T> implements Iterable<T> {
-
     private int size = 0;
     private T[] array;
+    private int point = 0;
 
-    public SimpleArray() {
-    }
-
-    public SimpleArray(T[] model) {
-        array = model;
+    public SimpleArray(int sizeArray) {
+        array = (T[]) new Object[sizeArray];
     }
 
     public void add(T model) {
@@ -20,19 +17,27 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public void set(int index, T model) {
-
+        if (!checkIndex(index, size)) {
+            throw new IndexOutOfBoundsException();
+        }
+        array[index] = model;
     }
 
     public void remove(int index) {
-
+        if (!checkIndex(index, size)) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (size - index >= 0) System.arraycopy(array, index + 1, array, index, size - index);
+        array[size] = null;
+        size--;
     }
 
     public T get(int index) {
         return array[index];
     }
 
-    public boolean checkIndex(int index, int size) {
-        if (index < 0 || index > size) {
+    private boolean checkIndex(int index, int size) {
+        if (index < 0 || index >= size) {
             return false;
         }
         return true;
@@ -40,16 +45,19 @@ public class SimpleArray<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
-    }
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return point < array.length;
+            }
 
-    public static void main(String[] args) {
-
-        int a = 5;
-        SimpleArray<Integer> sa = new SimpleArray<>();
-        System.out.println("created object: " + sa);
-        sa.add(a);
-        System.out.println("0 index is: " + sa.get(0));
-
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return array[point++];
+            }
+        };
     }
 }
