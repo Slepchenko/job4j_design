@@ -2,6 +2,7 @@ package ru.job4j.generics;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -31,14 +32,49 @@ public class SimpleArrayTest {
     }
 
     @Test
-    public void setElementNumber2() {
+    public void setElementNumber99() {
         SimpleArray<Integer> test = new SimpleArray<>(5);
         int num1 = 5;
         int num2 = 2;
-        int num3 = 10;
         test.add(num1);
         test.add(num2);
-        test.add(num3);
-        assertThat(test.set(1, 99), is(99));
+        test.set(1, 99);
+        assertThat(test.get(1), is(99));
     }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void WhenOverFlowException() {
+        SimpleArray<String> test = new SimpleArray<>(2);
+        test.add("one");
+        test.add("two");
+        test.add("three");
+    }
+
+    @Test
+    public void whenRemoveElement() {
+        SimpleArray<String> test = new SimpleArray<>(3);
+        test.add("one");
+        test.add("two");
+        test.remove(0);
+        assertThat(test.get(0), is("two"));
+    }
+
+    @Test
+    public void whenRemoveLastElement() {
+        SimpleArray<String> test = new SimpleArray<>(3);
+        test.add("one");
+        test.add("two");
+        test.add("three");
+        test.remove(0);
+        assertThat(test.get(0), is("two"));
+    }
+
+    @Test
+    public void whenOneElementArray() {
+        SimpleArray<String> test = new SimpleArray<>(1);
+        test.add("one");
+        test.remove(0);
+        assertNull(test.get(0), null);
+    }
+
 }
