@@ -43,7 +43,7 @@ public class SimpleArrayTest {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void WhenOverFlowException() {
+    public void whenOverFlowException() {
         SimpleArray<String> test = new SimpleArray<>(2);
         test.add("one");
         test.add("two");
