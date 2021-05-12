@@ -2,9 +2,8 @@ package ru.job4j.generics;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 
 public class SimpleArrayTest {
 
@@ -74,7 +73,7 @@ public class SimpleArrayTest {
         SimpleArray<String> test = new SimpleArray<>(1);
         test.add("one");
         test.remove(0);
-        assertNull(test.get(0), null);
+        assertFalse(test.iterator().hasNext());
     }
 
 }

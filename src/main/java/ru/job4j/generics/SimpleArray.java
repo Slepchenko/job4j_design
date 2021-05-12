@@ -26,29 +26,15 @@ public class SimpleArray<T> implements Iterable<T> {
         if (!checkIndex(index, size)) {
             throw new IndexOutOfBoundsException();
         }
-            System.arraycopy(array, index + 1, array, index, size - index);
+            System.arraycopy(array, index + 1, array, index, size - index - 1);
             array[size-1] = null;
             size--;
-
-//        if (array.length == 1) {
-//            array[0] = null;
-//            size--;
-//            return;
-//        }
-//        if (size == array.length && size > 1) {
-//            for (int i = index; i < size - 1; i++) {
-//                array[i] = array[i + 1];
-//            }
-//            array[size - 1] = null;
-//            size--;
-//            return;
-//        }
-//        if (size - index >= 0) System.arraycopy(array, index + 1, array, index, size - index);
-//        array[size] = null;
-//        size--;
     }
 
     public T get(int index) {
+        if (!checkIndex(index, size)) {
+            throw new IndexOutOfBoundsException();
+        }
         return array[index];
     }
 
