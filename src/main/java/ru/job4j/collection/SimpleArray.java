@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 public class SimpleArray<T> implements Iterable<T> {
 
     private T[] elementData;
-    int size;
-    int modCount = 0;
+    private int size;
+    private int modCount = 0;
 
     public SimpleArray() {
         elementData = (T[]) new Object[10];
