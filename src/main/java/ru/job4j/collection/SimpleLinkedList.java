@@ -50,7 +50,7 @@ public class SimpleLinkedList<E> implements List<E> {
         return new Iterator<E>() {
             int expectedModCount = modCount;
             int point = 0;
-
+            Node<E> current = first.next;
             @Override
             public boolean hasNext() {
                 return point < size;
@@ -64,7 +64,10 @@ public class SimpleLinkedList<E> implements List<E> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return get(point++);
+                E element = current.item;
+                current = current.next;
+                point++;
+                return element;
             }
         };
     }
