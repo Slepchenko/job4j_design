@@ -39,23 +39,25 @@ public class ListUtilsTest {
     }
 
     @Test
-    public void remove() {
-        List<String> input = new ArrayList<>(Arrays.asList("Zero", "One", "Two"));
-        String res = ListUtils.removeIf(input, (x) -> "Zero".equals(x));
-        assertThat("Zero", Is.is(res));
+    public void removeIf() {
+        List<String> input = new ArrayList<>(Arrays.asList("Zero", "Zero", "One", "Two", "Zero"));
+        ListUtils.removeIf(input, (x) -> "Zero".equals(x));
         assertThat(Arrays.asList("One", "Two"), Is.is(input));
+
     }
 
     @Test
-    public void replace() {
-        List<String> input = new ArrayList<>(Arrays.asList("Zero", "One", "Two"));
-        String res = ListUtils.replaceIf(input, (x) -> x.length() > 3, "Big string!");
-        assertThat("Zero", Is.is(res));
-        assertThat(Arrays.asList("Big string!", "One", "Two"), Is.is(input));
+    public void replaceIf() {
+        List<String> input = new ArrayList<>(Arrays.asList("Zero", "One", "Two", "Three"));
+        ListUtils.replaceIf(input, (x) -> x.length() > 3, "Big string!");
+        assertThat(Arrays.asList("Big string!", "One", "Two", "Big string!"), Is.is(input));
     }
 
     @Test
     public void removeAll() {
-
+        List<String> input = new ArrayList<>(Arrays.asList("Zero", "One", "Two", "Three"));
+        List<String> elements = new ArrayList<>(Arrays.asList("One", "Zero"));
+        ListUtils.removeAll(input, elements);
+        assertThat(Arrays.asList("Two", "Three"), Is.is(input));
     }
 }
