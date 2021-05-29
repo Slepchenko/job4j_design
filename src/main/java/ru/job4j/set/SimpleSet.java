@@ -2,29 +2,18 @@ package ru.job4j.set;
 
 import ru.job4j.collection.SimpleArray;
 
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class SimpleSet<T> implements Set<T> {
 
     private SimpleArray<T> set = new SimpleArray<>();
 
-    HashSet<String> a = new HashSet<>();
-
     @Override
     public boolean add(T value) {
         Iterator<T> i = set.iterator();
-
         while (i.hasNext()) {
-            T el = i.next();
-            if (el == null && value == null) {
-                return false;
-            }
-            if (el == null) {
-                set.add(value);
-                return true;
-            }
-            if (el.equals(value)) {
+            if (Objects.equals(i.next(), value)) {
                 return false;
             }
         }
@@ -35,16 +24,9 @@ public class SimpleSet<T> implements Set<T> {
     @Override
     public boolean contains(T value) {
         Iterator<T> i = set.iterator();
-        while (i.hasNext()) {
-            T el = i.next();
-            if (el == null && value == null) {
-                return true;
-            }
-            if (el == null) {
-                continue;
-            }
 
-            if (el.equals(value)) {
+        while (i.hasNext()) {
+            if (Objects.equals(i.next(), value)) {
                 return true;
             }
         }
