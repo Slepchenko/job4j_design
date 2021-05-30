@@ -32,18 +32,6 @@ public class SimpleSet<T> implements Set<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            Iterator<T> i = set.iterator();
-
-            @Override
-            public boolean hasNext() {
-                return i.hasNext();
-            }
-
-            @Override
-            public T next() {
-                return i.next();
-            }
-        };
+        return set.iterator();
     }
 }
