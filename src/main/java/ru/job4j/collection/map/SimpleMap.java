@@ -17,27 +17,25 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        int p = (int) (table.length * LOAD_FACTOR);
-        if (count >= p) {
+
+        if (count >= (int) (table.length * LOAD_FACTOR)) {
             expand();
         }
 
-        MapEntry<K, V> pair = new MapEntry<>(key, value);
         int index = indexFor(hash(key.hashCode()));
-        if (index > -1) {
-            if (table[index] == null) {
-                table[index] = pair;
-                count++;
-                modCount++;
-                return true;
-            }
+
+        if (table[index] == null) {
+            table[index] = new MapEntry<>(key, value);
+            count++;
+            modCount++;
+            return true;
         }
         return false;
     }
 
     private int hash(int hashCode) {
         if (hashCode != 0) {
-            int h = hashCode ^ (hashCode >>>16);
+            int h = hashCode ^ (hashCode >>> 16);
             return h;
         }
         return hashCode;
@@ -59,22 +57,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
         table = expendedTable;
     }
 
-    private int findIndex(int h) {
-        for (int i = 0; i < table.length; i++) {
-            if (table[i] == null) {
-                continue;
-            }
-            if (h == table[i].key.hashCode()) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     @Override
     public V get(K key) {
-        int index = findIndex(hash(key.hashCode()));
-        if (findIndex(index) > -1) {
+
+        int index = indexFor(hash(key.hashCode()));
+        if (table[index] != null) {
             return table[index].value;
         }
         return null;
@@ -82,8 +69,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean remove(K key) {
-        int index = findIndex(hash(key.hashCode()));
-        if (findIndex(index) > -1) {
+
+        int index = indexFor(hash(key.hashCode()));
+        if (table[index] != null) {
             table[index] = null;
             count--;
             modCount--;
@@ -98,7 +86,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
             private int point = 0;
             int index = 0;
             private int expectedModCount = modCount;
-            private  MapEntry<K, V>[] iteratorTable = table;
+            private MapEntry<K, V>[] iteratorTable = table;
 
             @Override
             public boolean hasNext() {
