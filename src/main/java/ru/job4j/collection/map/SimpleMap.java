@@ -42,7 +42,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int indexFor(int hash) {
-        return hash % (table.length - 1);
+        return hash % table.length;
     }
 
     private void expand() {
@@ -61,7 +61,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public V get(K key) {
 
         int index = indexFor(hash(key.hashCode()));
-        if (table[index] != null) {
+        if (table[index] != null && table[index].key.equals(key)) {
             return table[index].value;
         }
         return null;
@@ -71,10 +71,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public boolean remove(K key) {
 
         int index = indexFor(hash(key.hashCode()));
-        if (table[index] != null) {
+        if (table[index] != null && table[index].key.equals(key)) {
             table[index] = null;
             count--;
-            modCount--;
+            modCount++;
             return true;
         }
         return false;
