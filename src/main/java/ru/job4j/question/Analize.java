@@ -1,9 +1,6 @@
 package ru.job4j.question;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Analize {
     public static Info diff(Set<User> previous, Set<User> current) {
@@ -11,25 +8,31 @@ public class Analize {
         int changed = 0;
         int deleted = 0;
 
-//        Set<User> set = new HashSet<>(current);
-        Map<Integer, String> map = new HashMap<>();
-        for (User c : current) {
-            map.put(c.getId(), c.getName());
-        }
+        Map<Integer, String> general = new HashMap<>();
+        Map<Integer, String> prev = new HashMap<>();
+        Map<Integer, String> curr = new HashMap<>();
+
         for (User p : previous) {
-            if (!map.containsKey(p.getId())) {
-                deleted++;
-                continue;
-            }
-            String str = map.put(p.getId(), p.getName());
-            if (str != null && !str.equals(p.getName())) {
-                changed++;
-            } else if (str == null) {
-                added++;
-            }
+            general.put(p.getId(), p.getName());
+            prev.put(p.getId(), p.getName());
+        }
+        for (User c : current) {
+            general.put(c.getId(), c.getName());
+            curr.put(c.getId(), c.getName());
         }
 
+        for (Map.Entry<Integer, String> g : general.entrySet()) {
+            User u = new User(g.getKey(), g.getValue());
+            if (prev.containsKey(u.getId()) && !curr.containsKey(u.getId())) {
+                deleted++;
+            } else if (!prev.containsKey(u.getId()) && curr.containsKey(u.getId())) {
+                added++;
+            } else if (prev.containsKey(u.getId()) && curr.containsKey(u.getId())) {
+                if (!prev.get(u.getId()).equals(curr.get(u.getId()))) {
+                    changed++;
+                }
+            }
+        }
         return new Info(added, changed, deleted);
-
     }
 }
