@@ -11,7 +11,7 @@ public class ResultFile {
             for (int j = 0; j < data[i].length; j++) {
                 result += ((i + 1) * (j + 1)) + " ";
             }
-            result += "\n";
+            result += System.lineSeparator();
         }
 
         try (FileOutputStream out = new FileOutputStream("result.txt")) {
