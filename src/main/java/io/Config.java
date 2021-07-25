@@ -2,6 +2,7 @@ package io;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -30,18 +31,13 @@ public class Config {
                 values.put(pair[0], pair[1]);
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public String value(String key) {
-        for (Map.Entry<String, String> k : values.entrySet()) {
-            if (key.equals(k.getKey())) {
-                return k.getValue();
-            }
-        }
-        throw new UnsupportedOperationException("Don't impl this method yet!");
+        return values.get(key);
     }
 
     @Override
