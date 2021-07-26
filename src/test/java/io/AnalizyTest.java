@@ -18,12 +18,12 @@ public class AnalizyTest {
         File source = folder.newFile("source.txt");
         File target = folder.newFile("target.txt");
         try (PrintWriter out = new PrintWriter(source)) {
-            out.println("200 10:56:01" + System.lineSeparator() +
-                    "500 10:57:01" +  System.lineSeparator() +
-                    "400 10:58:01" + System.lineSeparator() +
-                    "200 10:59:01" + System.lineSeparator() +
-                    "500 11:01:02" + System.lineSeparator() +
-                    "200 11:02:02");
+            out.printf("200 10:56:01" + System.lineSeparator());
+            out.printf("500 10:57:01" + System.lineSeparator());
+            out.printf("400 10:58:01" + System.lineSeparator());
+            out.printf("200 10:59:01" + System.lineSeparator());
+            out.printf("500 11:01:02" + System.lineSeparator());
+            out.printf("200 11:02:02");
         }
         Analizy analizy = new Analizy();
         analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
