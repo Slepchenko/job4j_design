@@ -27,7 +27,7 @@ public class SimpleArray<T> implements Iterable<T> {
             throw new IndexOutOfBoundsException();
         }
             System.arraycopy(array, index + 1, array, index, size - index - 1);
-            array[size-1] = null;
+            array[size - 1] = null;
             size--;
     }
 
