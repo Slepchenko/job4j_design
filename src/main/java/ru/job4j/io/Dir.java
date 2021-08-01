@@ -25,19 +25,28 @@ public class Dir extends SimpleFileVisitor<Path> {
             throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsoluteFile()));
         }
 //        System.out.println(String.format("size : %s", file.getTotalSpace()));
-        for (File subfile : file.listFiles()) {
-//            System.out.println("File's name: \"" + subfile.getName() + "\", length: " + subfile.length());
-//            if (subfile.getName().endsWith(args[1])) {
-//                System.out.println(subfile.getName());
-//            }
-            System.out.println();
-            String a = subfile.getName();
-            a = a.substring(a.length() - args[1].length());
-            if (a.equals(args[1])) {
-                System.out.println(subfile.getName());
-            }
+
+        Files.walkFileTree(Path.of(args[0]), new MyFileVisitor(args[1]));
+
+    }
+
+    public static class MyFileVisitor extends SimpleFileVisitor<Path> {
+
+        private String txt;
+
+        public MyFileVisitor(String txt) {
+            this.txt = txt;
         }
 
-
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            List<String> files = Files.readAllLines(file);
+            for (String f : files) {
+                if (f.endsWith(txt)) {
+                    System.out.println(file.getFileName());
+                }
+            }
+            return super.visitFile(file, attrs);
+        }
     }
 }
