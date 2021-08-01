@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 
 public class Dir extends SimpleFileVisitor<Path> {
     public static void main(String[] args) throws IOException {
@@ -18,30 +17,27 @@ public class Dir extends SimpleFileVisitor<Path> {
         if (!file.isDirectory()) {
             throw new IllegalArgumentException(String.format("Not directory %s", file.getAbsoluteFile()));
         }
-//        System.out.println(String.format("size : %s", file.getTotalSpace()));
-//        Path p = Paths.get(args[0]);
-        Files.walkFileTree(Path.of("./"), new MyFileVisitor("class"));
+        String extension = args[1];
+        if (extension == null) {
+            throw new IllegalArgumentException(String.format("Not extension %s", file.getAbsoluteFile()));
+        }
+        Files.walkFileTree(Path.of(args[0]), new MyFileVisitor(args[1]));
 
     }
 
     public static class MyFileVisitor extends SimpleFileVisitor<Path> {
 
-        private String txt;
-//        private String p;
+        private String extension;
 
-        public MyFileVisitor(String txt) {
-            this.txt = txt;
-//            this.txt = p;
+        public MyFileVisitor(String extension) {
+            this.extension = extension;
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            List<String> lines = Files.readAllLines(file);
-//            for (String l: lines) {
-//                if (l.endsWith(txt)) {
-//                    System.out.println(file.getFileName());
-//                }
-//            }
+            if (file.toFile().getName().endsWith(extension)) {
+                System.out.println(file.getFileName());
+            }
             return FileVisitResult.CONTINUE;
         }
     }
