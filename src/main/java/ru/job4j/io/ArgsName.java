@@ -11,7 +11,7 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
-        if (args.length != 2) {
+        if (args.length != 3) {
             throw new IllegalArgumentException();
         }
        for (String a : args) {
