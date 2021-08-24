@@ -11,10 +11,11 @@ import java.util.zip.ZipOutputStream;
 public class Zip {
 
     public static void packFiles(List<File> sources, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
+        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target, true)))) {
             for (File s : sources) {
                 zip.putNextEntry(new ZipEntry(s.getPath()));
                 try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(s))) {
+//                    System.out.println(s.getAbsoluteFile());
                     zip.write(out.readAllBytes());
                 }
             }
@@ -59,7 +60,7 @@ public class Zip {
         List<Path> paths = Search.search(Path.of(file.getAbsolutePath()), p -> !p.toFile().getName().endsWith(path));
 
         for (Path p : paths) {
-            File f = new File(String.valueOf(p.getFileName().toAbsolutePath()));
+            File f = new File(String.valueOf(p.getParent()) + "\\" + (p.getFileName()));
             files.add(f);
         }
         return files;
