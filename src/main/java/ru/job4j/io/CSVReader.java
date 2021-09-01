@@ -112,7 +112,8 @@ public class CSVReader {
     }
 
     public static void main(String[] args) {
-        if (args.length != 4) {
+        ArgsName argsName = ArgsName.of(args);
+        if (argsName.invalid(4)) {
             throw new IllegalArgumentException("Root folder is null. Usage java -jar dir.jar ROOT_FOLDER.");
         }
         File file = Path.of(ArgsName.of(args).get("path")).toFile();
