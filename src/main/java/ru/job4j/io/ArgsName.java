@@ -11,9 +11,6 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
-        if (args.length != 4) {
-            throw new IllegalArgumentException();
-        }
        for (String a : args) {
            String[] pair = a.split("=");
            if (pair.length != 2) {
