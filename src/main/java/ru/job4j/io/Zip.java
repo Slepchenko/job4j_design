@@ -36,18 +36,9 @@ public class Zip {
     }
 
     public static void main(String[] args) throws IOException {
-
         ArgsName argsName = ArgsName.of(args);
-        if (argsName.invalid(3)) {
-            throw new IllegalArgumentException("Root folder is null. Usage java -jar dir.jar ROOT_FOLDER.");
-        }
         File file = new File(argsName.get("d"));
-        if (!file.exists()) {
-            throw new IllegalArgumentException(String.format("Not exist %s", file.getAbsoluteFile()));
-        }
-        if (args[1] == null || args[2] == null) {
-            throw new IllegalArgumentException(String.format("Not extension %s", file.getAbsoluteFile()));
-        }
+        validate(argsName, file, args);
         packFiles(filesPath(file, argsName.get("e")), new File(argsName.get("o")));
     }
     private static List<File> filesPath(File file, String path) throws IOException {
@@ -55,9 +46,21 @@ public class Zip {
         List<Path> paths = Search.search(Path.of(file.getAbsolutePath()),
                 p -> !p.toFile().getName().endsWith(path));
         for (Path p : paths) {
-            File f = new File((p.getParent()) + "\\" + (p.getFileName()));
+            File f = new File((p.toFile().toString()));
             files.add(f);
         }
         return files;
+    }
+
+    private static void validate(ArgsName argsName, File file, String[] args) {
+        if (argsName.invalid(3)) {
+            throw new IllegalArgumentException("Root folder is null. Usage java -jar dir.jar ROOT_FOLDER.");
+        }
+        if (!file.exists()) {
+            throw new IllegalArgumentException(String.format("Not exist %s", file.getAbsoluteFile()));
+        }
+        if (args[1] == null || args[2] == null) {
+            throw new IllegalArgumentException(String.format("Not extension %s", file.getAbsoluteFile()));
+        }
     }
 }
