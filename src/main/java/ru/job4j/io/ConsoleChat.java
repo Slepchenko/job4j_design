@@ -2,9 +2,8 @@ package ru.job4j.io;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
 
 public class ConsoleChat {
     private final String path;
@@ -12,42 +11,65 @@ public class ConsoleChat {
     private static final String OUT = "закончить";
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
+    private final Map<String, Function<String, Boolean>> dispatch = new HashMap<>();
+    private List<String> log = new ArrayList<>();
+    private List<String> answers = new ArrayList<>();
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
         this.botAnswers = botAnswers;
     }
 
-    public void run() {
-        List<String> log = new ArrayList<>();
-        List<String> answers = readPhrases();
-        Random random = new Random();
-        int index;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            String ask = reader.readLine();
-            boolean isContinue = true;
-            while (!ask.equals(OUT)) {
-                index = random.nextInt(answers.size());
-                if (ask.equals(STOP)) {
-                    isContinue = false;
+    public Function<String, Boolean> outCom() {
+        return out -> false;
+    }
+
+    public Function<String, Boolean> stopCom() {
+        return str -> {
+            log.add(str);
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                String s = reader.readLine();
+                while (!CONTINUE.equals(s)) {
+                    s = reader.readLine();
+                    log.add(s);
                 }
-                if (ask.equals(CONTINUE)) {
-                    log.add("user: " + ask.toUpperCase());
-                    isContinue = true;
-                    ask = reader.readLine();
-                    continue;
-                }
-                if (isContinue) {
-                    String answer = answers.get(index);
-                    log.add("user: " + ask);
-                    log.add("ConsoleChat: " + answer);
-                    System.out.println(answer);
-                } else {
-                    log.add("user: " + ask.toUpperCase());
-                }
-                ask = reader.readLine();
+                log.add(s);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            log.add("user: " + ask.toUpperCase());
+            return true;
+        };
+    }
+
+    public Function<String, Boolean> continueCom() {
+        return str -> {
+            Random random = new Random();
+            int index = random.nextInt(answers.size());
+            log.add(str);
+            log.add(answers.get(index));
+            return true;
+        };
+    }
+
+    public Function<String, Boolean> anotherCommand() {
+        return str -> {
+            Random random = new Random();
+            String answer = answers.get(random.nextInt(answers.size()));
+            System.out.println(answer);
+            log.add(str);
+            log.add(answer);
+          return true;
+        };
+    }
+
+    public void run() {
+        answers = readPhrases();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            boolean isContinue = ask(reader.readLine());
+            while (isContinue) {
+                isContinue = ask(reader.readLine());
+            }
+            log.add("user: " + "закончить");
             saveLog(log);
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,8 +98,28 @@ public class ConsoleChat {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public ConsoleChat init() {
+        this.load(ConsoleChat.OUT, this.outCom());
+        this.load(ConsoleChat.STOP, this.stopCom());
+        this.load(ConsoleChat.CONTINUE, this.continueCom());
+        return this;
+    }
+
+    public void load(String command, Function<String, Boolean> action) {
+        this.dispatch.put(command, action);
+    }
+
+    public boolean ask(String answ) {
+        if (dispatch.get(answ) == null) {
+
+            return anotherCommand().apply(answ);
+        }
+        return this.dispatch.get(answ).apply(answ);
+    }
+
+    public static void main(String[] args) {
         ConsoleChat cc = new ConsoleChat("./data/chat_log.txt", "./data/answer.txt");
+        cc.init();
         cc.run();
     }
 }
