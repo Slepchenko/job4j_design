@@ -26,18 +26,32 @@ public class ConsoleChat {
 
     public Function<String, Boolean> stopCom() {
         return str -> {
+            boolean res = true;
             log.add(str);
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                String s = reader.readLine();
-                while (!CONTINUE.equals(s)) {
-                    s = reader.readLine();
-                    log.add(s);
-                }
-                log.add(s);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String s = null;
+            try {
+                System.out.println("Введите ваш вопрос");
+                s = reader.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+
+            while (!CONTINUE.equals(s)) {
+                try {
+                    System.out.println("Введите ваш вопрос");
+                    s = reader.readLine();
+                    if (OUT.equals(s)) {
+                        res = false;
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                log.add(s);
+                }
+                log.add(s);
+            return res;
         };
     }
 
@@ -58,22 +72,22 @@ public class ConsoleChat {
             System.out.println(answer);
             log.add(str);
             log.add(answer);
-          return true;
+            return true;
         };
     }
 
-    public void run() {
+    public void run() throws IOException {
         answers = readPhrases();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            boolean isContinue = ask(reader.readLine());
-            while (isContinue) {
-                isContinue = ask(reader.readLine());
-            }
-            log.add("user: " + "закончить");
-            saveLog(log);
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Введите вопрос");
+        boolean isContinue = ask(reader.readLine());
+        while (isContinue) {
+            isContinue = ask(reader.readLine());
+            System.out.println("Введите вопрос");
         }
+        log.add("user: " + "закончить");
+        saveLog(log);
+
     }
 
     private List<String> readPhrases() {
@@ -117,7 +131,7 @@ public class ConsoleChat {
         return this.dispatch.get(answ).apply(answ);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ConsoleChat cc = new ConsoleChat("./data/chat_log.txt", "./data/answer.txt");
         cc.init();
         cc.run();
