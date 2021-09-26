@@ -30,7 +30,7 @@ public class Ship {
 
     public static void main(String[] args) {
         String[] data = new String[]{"length 100, weight 39"};
-        final Ship ship = new Ship(true, 26, new RoutingCert("Green Tundra"), data);
+        final Ship ship = new Ship(true, 26, new RoutingCert("Green Tundra", 22), data);
 
         final Gson gson = new GsonBuilder().create();
         System.out.println(gson.toJson(ship));
@@ -41,9 +41,9 @@ public class Ship {
                     + "\"Age ship\":32,"
                     + "\"rc\":"
                         + "{"
-                            + "\"name\":\"Even Given\""
-//                            + "\"numIMO\":\"123456789\""
-                        + "}"
+                            + "\"name\":\"Even Given\","
+                            + "\"numIMO\":\"123456789\""
+                        + "},"
                     + "\"data\":"
                         + "[\"Length 400m\", \"Weight 59m\"]"
                 + "}";
