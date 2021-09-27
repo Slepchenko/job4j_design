@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<plane warplane="true" age="8">
+    <onBoardNum number="C-54"/>
+    <datas>
+        <data>Military transport aircraft</data>
+        <data>Capacity 40 person</data>
+    </datas>
+</plane>
