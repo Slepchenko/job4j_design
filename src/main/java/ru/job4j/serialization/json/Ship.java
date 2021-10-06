@@ -1,7 +1,5 @@
 package ru.job4j.serialization.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,10 +28,6 @@ public class Ship {
         return age;
     }
 
-    public RoutingCert getRc() {
-        return rc;
-    }
-
     public String[] getData() {
         return data;
     }
@@ -49,27 +43,6 @@ public class Ship {
     }
 
     public static void main(String[] args) {
-//        String[] data = new String[]{"length 100, weight 39"};
-//        final Ship ship = new Ship(true, 26, new RoutingCert("Green Tundra", 22), data);
-//
-//        final Gson gson = new GsonBuilder().create();
-//        System.out.println(gson.toJson(ship));
-//        System.out.println();
-//        final String shipJson =
-//                "{"
-//                    + "\"iceClass\":false,"
-//                    + "\"Age ship\":32,"
-//                    + "\"rc\":"
-//                        + "{"
-//                            + "\"name\":\"Even Given\","
-//                            + "\"numIMO\":\"123456789\""
-//                        + "},"
-//                    + "\"data\":"
-//                        + "[\"Length 400m\", \"Weight 59m\"]"
-//                + "}";
-//        final Ship shipMod = gson.fromJson(shipJson, Ship.class);
-//        System.out.println(shipMod);
-
         JSONObject jsonRS = new JSONObject("{\"name]\":\"XVII съезв КПСС\"}");
 
         List<String> list = new ArrayList<>();
@@ -86,6 +59,6 @@ public class Ship {
         jsonObject.put("data", jsonData);
 
         System.out.println(jsonObject);
-        System.out.println(new JSONObject(ship).toString());
+        System.out.println(new JSONObject(ship));
     }
 }
