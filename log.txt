@@ -1,0 +1,10 @@
+C:\projects\job4j_design\input.txt
+C:\projects\job4j_design\result.txt
+C:\projects\job4j_design\result_csv.txt
+C:\projects\job4j_design\target\surefire-reports\ru.job4j.collection.SimpleQueueTest.txt
+C:\projects\job4j_design\target\surefire-reports\ru.job4j.it.EvenNumbersIteratorTest.txt
+C:\projects\job4j_design\input.txt
+C:\projects\job4j_design\result.txt
+C:\projects\job4j_design\result_csv.txt
+C:\projects\job4j_design\target\surefire-reports\ru.job4j.collection.SimpleQueueTest.txt
+C:\projects\job4j_design\target\surefire-reports\ru.job4j.it.EvenNumbersIteratorTest.txt
