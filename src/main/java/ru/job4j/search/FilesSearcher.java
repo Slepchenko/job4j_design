@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,39 +41,42 @@ public class FilesSearcher {
     }
 
     private static void searcher(Path start, String[] args) throws IOException {
-        String name = ArgsName.of(args).get("n");
-        String searchType = ArgsName.of(args).get("t");
-        String out = ArgsName.of(args).get("o");
+        Map<String, String> values = new HashMap<>();
+        values.put("n", ArgsName.of(args).get("n"));
+        values.put("t", ArgsName.of(args).get("t"));
+        values.put("o", ArgsName.of(args).get("o"));
+        values.put("d", ArgsName.of(args).get("d"));
 
-        if ("name".equals(searchType)) {
-            Search.search(start, x -> {
-                String[] pair = x.toFile().getName().split("\\.");
-                if (name.equals(pair[0])) {
-                    writer(out, x.toFile() + System.lineSeparator());
+        Search.search(start, searchCondition(values));
+    }
+
+    private static Predicate<Path> searchCondition(Map<String, String> values) {
+        Predicate<Path> result = null;
+        String t = values.get("t");
+        String n = values.get("n");
+        if (t.equals("mask")) {
+            String regName = t.replace("*", "[a-zA-Z0-9\\s_]+");
+            regName = regName.replace("?", "[a-zA-Z0-9\\s_]");
+            Pattern pattern = Pattern.compile(regName);
+            result = path -> {
+                Matcher matcher = pattern.matcher(path.toFile().getName());
+                if (matcher.find()) {
+                    writer(values.get("o"), path.toFile() + System.lineSeparator());
                     return true;
                 }
                 return false;
-            });
+            };
+        } else if (t.equals("name")) {
+            String[] str = t.split("\\.");
+            result = path -> {
+                if (n.equals(str[0])) {
+                    writer(values.get("o"), path.toFile() + System.lineSeparator());
+                    return true;
+                }
+                return false;
+            };
         }
-
-        if ("mask".equals(searchType)) {
-            String regName = name.replace("*", "[a-zA-Z0-9\\s_]+");
-            regName = regName.replace("?", "[a-zA-Z0-9\\s_]");
-            Pattern pattern = Pattern.compile(regName);
-            Search.search(start, x -> {
-                Matcher matcher = pattern.matcher(x.toFile().getName());
-               if (matcher.find()) {
-                   writer(out, x.toFile() + System.lineSeparator());
-                   return true;
-               }
-               return false;
-            });
-        }
-    }
-
-    private static boolean predicate() {
-
-        return false;
+        return result;
     }
 
     private static void writer(String out, String file) {
