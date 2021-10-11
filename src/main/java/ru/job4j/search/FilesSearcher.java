@@ -54,22 +54,26 @@ public class FilesSearcher {
         Predicate<Path> result = null;
         String t = values.get("t");
         String n = values.get("n");
+
         if (t.equals("mask")) {
-            String regName = t.replace("*", "[a-zA-Z0-9\\s_]+");
+            String regName = n.replace("*", "[a-zA-Z0-9\\s_]+");
             regName = regName.replace("?", "[a-zA-Z0-9\\s_]");
             Pattern pattern = Pattern.compile(regName);
             result = path -> {
                 Matcher matcher = pattern.matcher(path.toFile().getName());
                 if (matcher.find()) {
+                    System.out.println(path.toFile());
                     writer(values.get("o"), path.toFile() + System.lineSeparator());
                     return true;
                 }
                 return false;
             };
         } else if (t.equals("name")) {
-            String[] str = t.split("\\.");
+
             result = path -> {
+                String[] str = path.toFile().getName().split("\\.");
                 if (n.equals(str[0])) {
+                    System.out.println(path.toFile());
                     writer(values.get("o"), path.toFile() + System.lineSeparator());
                     return true;
                 }
