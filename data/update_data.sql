@@ -1,0 +1,1 @@
+update shop_hat set prise = 349;

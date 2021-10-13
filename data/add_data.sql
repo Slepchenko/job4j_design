@@ -1,0 +1,1 @@
+insert into shop_hat(name, prise, manufacturer) values('Ушанка', 499, 'Россия');
