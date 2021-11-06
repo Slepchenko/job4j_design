@@ -1,12 +1,12 @@
 create table users(
 	id serial primary key,
-	user_name text
+	user_name text,
+	role_id int references role(id)
 );
 
 create table role(
 	id serial primary key,
 	role text,
-	user_id int references users(id)
 );
 
 create table rules(

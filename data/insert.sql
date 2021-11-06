@@ -1,6 +1,6 @@
-insert into users(id, user_name) values('1', 'user_1');
-insert into users(id, user_name) values('2', 'user_2');
-insert into users(id, user_name) values('3', 'user_3');
+insert into users(id, user_name, role_id) values('1', 'user_1', '2');
+insert into users(id, user_name, role_id) values('2', 'user_2', '3');
+insert into users(id, user_name, role_id) values('3', 'user_3', '1');
 
 insert into role(id, role, user_id) values('1', 'role_1', '2');
 insert into role(id, role, user_id) values('2', 'role_2', '1');
