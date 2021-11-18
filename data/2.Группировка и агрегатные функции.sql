@@ -42,5 +42,21 @@ insert into devices_people(device_id, people_id) values('8', '1');
 insert into devices_people(device_id, people_id) values('8', '2');
 
 select avg(price) from devices;
-select dp.people_id, avg(d.price) from devices as d join devices_people dp on dp.device_id = d.id group by dp.people_id;
-select dp.people_id, avg(d.price) >= 5000 from devices as d join devices_people dp on dp.device_id = d.id group by dp.people_id;
+
+select p.name, avg(d.price)
+from people as p
+join devices_people dp
+on p.id = dp.people_id
+join devices d
+on dp.device_id = d.id
+group by p.name;
+
+
+select p.name, avg(d.price)
+from people as p
+join devices_people dp
+on p.id = dp.people_id
+join devices d
+on d.id = dp.device_id
+group by p.name
+having avg(d.price) >= 50;
