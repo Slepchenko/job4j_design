@@ -55,7 +55,7 @@ values('Пармезан', '2', '27.10.2021', '270');
 insert into product(name, type_id, expired_date, price)
 values('Пошехонский', '2', '14.02.2021', '250');
 insert into product(name, type_id, expired_date, price)
-values('Касу марцу', '2', '10.08.2019', '14000');
+values('Касу марцу', '2', '10.08.2019', '1400000');
 
 insert into product(name, type_id, expired_date, price)
 values('Пломбир', '3', '12.03.2021', '150');
@@ -69,6 +69,9 @@ insert into product(name, type_id, expired_date, price)
 values('Замороженный сок', '3', '21.06.2021', '100');
 insert into product(name, type_id, expired_date, price)
 values('Акутак', '3', '01.10.2021', '50');
+insert into product(name, type_id, expired_date, price)
+values('Мега мороженое', '3', '01.10.2021', '140000');
+
 
 insert into product(name, type_id, expired_date, price)
 values('Биойогурт', '4', '28.04.2021', '200');
@@ -92,12 +95,14 @@ join type t
 on p.type_id = t.id 
 and p.name like '%мороженое%';
 
-select * from product as p 
-join type t 
-on p.type_id = t.id 
-and current_date < p.expired_date + interval '6 month';
+select * from product 
+where expired_date < current_date;
 
-select max(price) from product;
+select p.name, p.price, t.name 
+from product as p
+join type t on p.type_id = t.id 
+group by p.name, t.name, p.price
+having p.price = (select max(price) from product);
 
 select t.name, count(p.type_id) 
 from type as t 
