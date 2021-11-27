@@ -98,11 +98,8 @@ and p.name like '%мороженое%';
 select * from product 
 where expired_date < current_date;
 
-select p.name, p.price, t.name 
-from product as p
-join type t on p.type_id = t.id 
-group by p.name, t.name, p.price
-having p.price = (select max(price) from product);
+select name, price from product
+where price = (select max(price) from product);
 
 select t.name, count(p.type_id) 
 from type as t 
