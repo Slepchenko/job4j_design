@@ -4,7 +4,7 @@ create table departments(
 );
 
 create table emploers(
-	departments_id int,
+	departments_id int primary key,
 	name text
 );
 
@@ -18,11 +18,7 @@ insert into departments(name) values('depart_6');
 insert into emploers(departments_id, name) values('1', 'emploer_1');
 insert into emploers(departments_id, name) values('2', 'emploer_2');
 insert into emploers(departments_id, name) values('3', 'emploer_3');
-insert into emploers(departments_id, name) values('3', 'emploer_4');
-insert into emploers(departments_id, name) values('4', 'emploer_5');
-insert into emploers(departments_id, name) values('1', 'emploer_6');
-insert into emploers(departments_id, name) values('5', 'emploer_7');
-insert into emploers(departments_id, name) values('1', 'emploer_8');
+insert into emploers(departments_id, name) values('4', 'emploer_4');
 
 --3.
 select d.name, e.name
