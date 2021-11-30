@@ -1,10 +1,11 @@
 create table departments(
-	id serial,
+	id serial primary key,
 	name text
 );
 
 create table emploers(
-	departments_id int primary key,
+	id serial primary key,
+	departments_id int references departments(id),
 	name text
 );
 
