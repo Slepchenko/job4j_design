@@ -17,7 +17,7 @@ public class TableEditor implements AutoCloseable {
     private void initConnection() throws ClassNotFoundException {
         Class.forName(properties.getProperty("driver_class"));
         try {
-            this.connection =DriverManager.getConnection(properties.getProperty("url"),
+            this.connection = DriverManager.getConnection(properties.getProperty("url"),
                     properties.getProperty("username"), properties.getProperty("password"));
         } catch (SQLException e) {
             e.printStackTrace();
