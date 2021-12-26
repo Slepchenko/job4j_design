@@ -1,9 +1,5 @@
 package ru.job4j.jdbc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -18,9 +14,13 @@ public class TableEditor implements AutoCloseable {
         initConnection();
     }
 
-    private void initConnection() throws Exception {
-        try (Connection connection = getConnection()) {
-            this.connection = connection;
+    private void initConnection() throws ClassNotFoundException {
+        Class.forName(properties.getProperty("driver_class"));
+        try {
+            this.connection =DriverManager.getConnection(properties.getProperty("url"),
+                    properties.getProperty("username"), properties.getProperty("password"));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -68,11 +68,6 @@ public class TableEditor implements AutoCloseable {
         if (connection != null) {
             connection.close();
         }
-    }
-
-    private Connection getConnection() throws Exception {
-        Class.forName(properties.getProperty("driver_class"));
-        return DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
     }
 
     private void action(String sql) throws Exception {
