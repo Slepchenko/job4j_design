@@ -24,6 +24,9 @@ public class ImportDB {
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             while (rd.ready()) {
                 String[] data = rd.readLine().split(";");
+                if (data.length != 2 && (data[0] != null || data[1] != null)) {
+                    throw new IllegalArgumentException();
+                }
                 users.add(new User(data[0], data[1]));
             }
         }
@@ -38,7 +41,8 @@ public class ImportDB {
                 cfg.getProperty("jdbc.password")
         )) {
             for (User user : users) {
-                try (PreparedStatement ps = cnt.prepareStatement("insert into users ...")) {
+                try (PreparedStatement ps = cnt.prepareStatement(
+                        "insert into users (name, email) values (?, ?);")) {
                     ps.setString(1, user.name);
                     ps.setString(2, user.email);
                     ps.execute();
@@ -56,7 +60,6 @@ public class ImportDB {
             this.email = email;
         }
     }
-
 
     public static void main(String[] args) throws Exception {
         Properties cfg = new Properties();
