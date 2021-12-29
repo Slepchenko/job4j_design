@@ -24,7 +24,7 @@ public class ImportDB {
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             while (rd.ready()) {
                 String[] data = rd.readLine().split(";");
-                if (data.length != 2 && (data[0] != null || data[1] != null)) {
+                if (data.length != 2 || data[0].isEmpty() || data[1].isEmpty()) {
                     throw new IllegalArgumentException();
                 }
                 users.add(new User(data[0], data[1]));
