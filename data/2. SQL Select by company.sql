@@ -39,4 +39,10 @@ select c.name, count(p.company_id)
 from person p
 join company c on p.company_id = c.id
 group by c.name
+having (select count(p.company_id) as quantity
+		from person p
+		join company c on p.company_id = c.id
+		group by c.name
+	    order by quantity desc
+	    limit 1) = count(p.company_id)
 			
