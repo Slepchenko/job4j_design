@@ -33,15 +33,14 @@ select p.name, c.name
 from person p
 join company c on c.id = p.company_id
 where p.company_id != 5
-
+		
 select c.name, count(p.company_id)
 from person p
 join company c on p.company_id = c.id
 group by c.name
-having (select count(p.company_id) as quantity
+having count(p.company_id) = 
+		(select count(p.company_id) as quantity
 		from person p
-		join company c on p.company_id = c.id
-		group by c.name
+		group by company_id
 	    order by quantity desc
-	    limit 1) = count(p.company_id)
-		
+	    limit 1)
