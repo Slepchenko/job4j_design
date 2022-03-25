@@ -17,10 +17,10 @@ public class GCDemo {
 
     public static void main(String[] args) {
         info();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             new Person(i, "N" + i);
         }
-        System.gc();
+//        System.gc();
         info();
     }
 }
