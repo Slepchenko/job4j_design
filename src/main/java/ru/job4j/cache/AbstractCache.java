@@ -12,10 +12,11 @@ public abstract class AbstractCache<K, V> {
     }
 
     public V get(K key) {
-        if (cache.get(key).get() != null) {
-            return load(key);
+        V strongRef = cache.getOrDefault(key, new SoftReference<>(null)).get();
+        if (strongRef == null) {
+            put(key, load(key));
         }
-        throw new NullPointerException("deleted by GC");
+        return cache.getOrDefault(key, new SoftReference<>(null)).get();
     }
 
     protected abstract V load(K key);
