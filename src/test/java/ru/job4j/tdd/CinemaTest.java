@@ -40,8 +40,6 @@ public class CinemaTest {
         Calendar date = Calendar.getInstance();
         date.set(2020, 10, 10, 23, 00);
         Ticket ticket = cinema.buy(account, 1, 1, date);
-        assertThat(ticket, is(new Ticket3D()));
-
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -51,7 +49,6 @@ public class CinemaTest {
         Calendar date = Calendar.getInstance();
         date.set(2020, 10, 10, 23, 00);
         Ticket ticket = cinema.buy(account, 10000, 1, date);
-        assertThat(ticket, is(new Ticket3D()));
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -61,7 +58,5 @@ public class CinemaTest {
         Calendar date = Calendar.getInstance();
         date.set(2020, 10, 10, 23, 00);
         Ticket ticket = cinema.buy(account, 1, 1, date);
-        Ticket ticket1 = cinema.buy(account, 1, 1, date);
-        assertThat(ticket, is(ticket1));
     }
 }
