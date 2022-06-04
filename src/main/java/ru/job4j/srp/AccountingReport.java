@@ -16,11 +16,11 @@ public class AccountingReport implements Report {
         text.append("Name; Hired; Fired; Salary;");
         text.append(System.lineSeparator());
         for (Employee employee : store.findBy(filter)) {
+            employee.setSalary(employee.getSalary() * 65);
             text.append(employee.getName()).append(";")
                     .append(employee.getSalary()).append("$;")
                     .append(System.lineSeparator());
         }
         return text.toString();
     }
-
 }
