@@ -17,21 +17,8 @@ public class HrReport implements Report {
         StringBuilder text = new StringBuilder();
         text.append("Name; Hired; Fired; Salary;");
         text.append(System.lineSeparator());
-
-        Comparator<Employee> comparator = new Comparator<Employee>() {
-            @Override
-            public int compare(Employee o1, Employee o2) {
-                if (o1.getSalary() < o2.getSalary()) {
-                    return 1;
-                } else if (o1.getSalary() > o2.getSalary()) {
-                    return -1;
-                }
-                return 0;
-            }
-        };
-
         List<Employee> list = store.findBy(filter);
-        list.sort(comparator);
+        list.sort(Comparator.comparingDouble(Employee::getSalary).reversed());
 
         for (Employee employee : list) {
             text.append(employee.getName()).append(";")

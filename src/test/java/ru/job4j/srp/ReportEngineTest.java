@@ -35,7 +35,7 @@ public class ReportEngineTest {
                 .append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator())
                 .append(worker1.getName()).append(";")
-                .append(6500.0).append("$;")
+                .append(worker1.getSalary() * AccountingReport.USD_RATE).append("$;")
                 .append(System.lineSeparator());
         assertThat(engine.generate(em -> true), is(expect.toString()));
 

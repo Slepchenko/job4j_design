@@ -6,6 +6,8 @@ public class AccountingReport implements Report {
 
     private Store store;
 
+    public static final int USD_RATE = 65;
+
     public AccountingReport(Store store) {
         this.store = store;
     }
@@ -16,7 +18,7 @@ public class AccountingReport implements Report {
         text.append("Name; Hired; Fired; Salary;");
         text.append(System.lineSeparator());
         for (Employee employee : store.findBy(filter)) {
-            employee.setSalary(employee.getSalary() * 65);
+            employee.setSalary(employee.getSalary() * USD_RATE);
             text.append(employee.getName()).append(";")
                     .append(employee.getSalary()).append("$;")
                     .append(System.lineSeparator());
