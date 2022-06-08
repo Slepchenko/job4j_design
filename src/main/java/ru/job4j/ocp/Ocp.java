@@ -1,31 +1,39 @@
 package ru.job4j.ocp;
 
 public class Ocp {
-    /**
-     * Добавили в клас еще один метод, тем самым изменив его
-     */
+
     public class CoffeeMachine1 {
-        public void makeCoffee() {
+        int coffee = 1;
 
+        Make make;
+        Cappuccino cappuccino;
+
+        Cappuccino makeCoffee(int sugar) {
+            make = new Make(coffee, sugar, cappuccino);
+
+           return make.makeCoffee();
         }
     }
 
-    public class CoffeeMachine2 {
-        public void makeCoffee() {
 
+
+    public class Make {
+
+        int sugar;
+        Cappuccino cappuccino;
+
+        public Make(int coffee, int sugar, Cappuccino cappuccino) {
+            this.sugar = sugar;
+            this.cappuccino = cappuccino;
         }
 
-        public void makeTea() {
-
-        }
-    }
-
-
-    public class Make extends CoffeeMachine1 {
-
-        @Override
-        public void makeCoffee() {
-
+        public Cappuccino makeCoffee() {
+            return new Cappuccino();
         }
     }
+
+    public class Cappuccino {
+
+    }
+
 }
