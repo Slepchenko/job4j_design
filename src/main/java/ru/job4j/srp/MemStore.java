@@ -18,4 +18,7 @@ public class MemStore implements Store {
         return employees.stream().filter(filter).collect(Collectors.toList());
     }
 
+    public String serialization(StoreSerialization<List<Employee>> serialization) {
+        return serialization.serialization(employees);
+    }
 }

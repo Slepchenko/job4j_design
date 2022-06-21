@@ -2,7 +2,9 @@ package ru.job4j.srp;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import org.junit.Test;
+
 import java.util.Calendar;
 
 public class ReportEngineTest {
@@ -91,5 +93,43 @@ public class ReportEngineTest {
                 .append("</html>")
                 .append(System.lineSeparator());
         assertThat(engine.generate(em -> true), is(expect.toString()));
+    }
+
+    @Test
+    public void whenJSONSerialization() {
+        MemStore store = new MemStore();
+        Calendar hired = Calendar.getInstance();
+        hired.set(2022, 4, 8, 0, 0, 0);
+        Calendar fired = Calendar.getInstance();
+        fired.set(2022, 8, 8, 0, 0, 0);
+        Employee worker = new Employee("Ivan", hired, fired, 100);
+        store.add(worker);
+        String expect = "[{\"name\":\"Ivan\",\"hired\":" +
+                "{\"year\":2022,\"month\":4,\"dayOfMonth\":8," +
+                "\"hourOfDay\":0,\"minute\":0,\"second\":0},\"fired\":" +
+                "{\"year\":2022,\"month\":8,\"dayOfMonth\":8,\"hourOfDay\":0," +
+                "\"minute\":0,\"second\":0},\"salary\":100.0}]";
+        assertThat(store.serialization(new JSONStoreSerialization<>()), is(expect));
+    }
+
+    @Test
+    public void whenXMLSerialization() {
+        MemStore store = new MemStore();
+        Calendar hired = Calendar.getInstance();
+        hired.set(2022, 4, 8, 0, 0, 0);
+        Calendar fired = Calendar.getInstance();
+        fired.set(2022, 8, 8, 0, 0, 0);
+        Employee worker = new Employee("Ivan", hired, fired, 100);
+        store.add(worker);
+        String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                "<employees>\n" +
+                "<employees>\n" +
+                "<fired>2022-09-08T00:00:00.720+12:00</fired>\n" +
+                "<hired>2022-05-08T00:00:00.684+12:00</hired>\n" +
+                "<name>Ivan</name>\n" +
+                "<salary>100.0</salary>\n" +
+                "</employees>\n" +
+                "</employees>\n";
+        assertThat(store.serialization(new XMLStoreSerialization<>()), is(expect));
     }
 }
