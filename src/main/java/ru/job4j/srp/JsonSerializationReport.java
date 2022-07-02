@@ -16,7 +16,6 @@ public class JsonSerializationReport implements Report {
     @Override
     public String generate(Predicate<Employee> filter) {
         Gson gsonBuilder = new GsonBuilder().create();
-//        System.out.println(gsonBuilder.toJson(store.findBy(filter)));
         return gsonBuilder.toJson(store.findBy(filter));
     }
 }
