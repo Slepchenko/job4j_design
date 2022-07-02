@@ -1,16 +1,22 @@
 package ru.job4j.srp;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
+import javax.xml.bind.JAXBException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.StringJoiner;
 
 public class ReportEngineTest {
 
     @Test
-    public void whenOldGenerated() {
+    public void whenOldGenerated() throws JAXBException {
         MemStore store = new MemStore();
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 100);
@@ -27,7 +33,7 @@ public class ReportEngineTest {
     }
 
     @Test
-    public void whenAccountingReport() {
+    public void whenAccountingReport() throws JAXBException {
         MemStore store = new MemStore();
         Calendar now = Calendar.getInstance();
         Employee worker1 = new Employee("Ivan", now, now, 100);
@@ -44,7 +50,7 @@ public class ReportEngineTest {
     }
 
     @Test
-    public void whenHrReport() {
+    public void whenHrReport() throws JAXBException {
         MemStore store = new MemStore();
         Calendar now = Calendar.getInstance();
         Employee worker1 = new Employee("Ivan", now, now, 100);
@@ -70,7 +76,7 @@ public class ReportEngineTest {
     }
 
     @Test
-    public void whenProgrammerReport() {
+    public void whenProgrammerReport() throws JAXBException {
         MemStore store = new MemStore();
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 100);
@@ -96,40 +102,61 @@ public class ReportEngineTest {
     }
 
     @Test
-    public void whenJSONSerialization() {
+    public void whenJSONSerialization() throws JAXBException {
         MemStore store = new MemStore();
         Calendar hired = Calendar.getInstance();
-        hired.set(2022, 4, 8, 0, 0, 0);
+        hired.set(2022, Calendar.APRIL, 8, 0, 0, 0);
         Calendar fired = Calendar.getInstance();
-        fired.set(2022, 8, 8, 0, 0, 0);
+        fired.set(2022, Calendar.AUGUST, 8, 0, 0, 0);
         Employee worker = new Employee("Ivan", hired, fired, 100);
         store.add(worker);
-        String expect = "[{\"name\":\"Ivan\",\"hired\":" +
-                "{\"year\":2022,\"month\":4,\"dayOfMonth\":8," +
-                "\"hourOfDay\":0,\"minute\":0,\"second\":0},\"fired\":" +
-                "{\"year\":2022,\"month\":8,\"dayOfMonth\":8,\"hourOfDay\":0," +
-                "\"minute\":0,\"second\":0},\"salary\":100.0}]";
-        assertThat(store.serialization(new JSONStoreSerialization<>()), is(expect));
+        Date hDate = hired.getTime();
+        Date fDate = fired.getTime();
+        Report json = new JsonSerializationReport(store);
+        StringBuilder expected = new StringBuilder();
+        DateFormat format = new SimpleDateFormat("yyyy");
+        String hYear = format.format(hDate);
+        String fYear = format.format(hDate);
+        expected.append("[{\"name\":\"Ivan\",\"hired\":")
+                .append("{\"year\":").append(hYear).append(",\"month\":")
+                .append(hDate.getMonth()).append(",\"dayOfMonth\":").append(hDate.getDate())
+                .append(",\"hourOfDay\":").append(hDate.getHours()).append(",\"minute\":")
+                .append(hDate.getMinutes()).append(",\"second\":").append(hDate.getSeconds())
+                .append("},\"fired\":{\"year\":").append(fYear).append(",\"month\":")
+                .append(fDate.getMonth()).append(",\"dayOfMonth\":").append(fDate.getDate())
+                .append(",\"hourOfDay\":").append(fDate.getHours()).append(",\"minute\":")
+                .append(fDate.getSeconds()).append(",\"second\":").append(fDate.getSeconds())
+                .append("},\"salary\":").append(worker.getSalary()).append("}]");
+        String result = json.generate(em -> true);
+        assertEquals(result, expected.toString());
     }
 
     @Test
-    public void whenXMLSerialization() {
+    public void whenXMLSerialization() throws JAXBException {
         MemStore store = new MemStore();
         Calendar hired = Calendar.getInstance();
-        hired.set(2022, 4, 8, 0, 0, 0);
+        hired.set(2022, Calendar.APRIL, 8, 0, 0, 0);
         Calendar fired = Calendar.getInstance();
-        fired.set(2022, 8, 8, 0, 0, 0);
+        fired.set(2022, Calendar.AUGUST, 8, 0, 0, 0);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        String hiredDate = formatter.format(hired.getTime());
+        String firedDate = formatter.format(fired.getTime());
         Employee worker = new Employee("Ivan", hired, fired, 100);
         store.add(worker);
-        String expect = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-                "<employees>\n" +
-                "<employees>\n" +
-                "<fired>2022-09-08T00:00:00.720+12:00</fired>\n" +
-                "<hired>2022-05-08T00:00:00.684+12:00</hired>\n" +
-                "<name>Ivan</name>\n" +
-                "<salary>100.0</salary>\n" +
-                "</employees>\n" +
-                "</employees>\n";
-        assertThat(store.serialization(new XMLStoreSerialization<>()), is(expect));
+        Report xml = new XmlSerializationReport(store);
+        String result = xml.generate(em -> true);
+
+        StringJoiner expected = new StringJoiner("\n");
+        expected.add("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>")
+                .add("<employees>")
+                .add("    <employees>")
+                .add(String.format("        <fired>%s</fired>", firedDate))
+                .add(String.format("        <hired>%s</hired>", hiredDate))
+                .add("        <name>Ivan</name>")
+                .add("        <salary>100.0</salary>")
+                .add("    </employees>")
+                .add("</employees>\n");
+
+        assertEquals(result, expected.toString());
     }
 }
