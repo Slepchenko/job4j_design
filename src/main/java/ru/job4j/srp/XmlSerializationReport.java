@@ -9,17 +9,19 @@ import java.util.function.Predicate;
 
 public class XmlSerializationReport implements Report {
 
-    Store store;
+    private Store store;
+    private JAXBContext context;
+    private Marshaller marshaller;
 
-    public XmlSerializationReport(Store store) {
+    public XmlSerializationReport(Store store) throws JAXBException {
         this.store = store;
+        context = JAXBContext.newInstance(Employees.class);
+        marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
     }
 
     @Override
     public String generate(Predicate<Employee> filter) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(Employees.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         String xml = "";
         try (StringWriter writer = new StringWriter()) {
             marshaller.marshal(new Employees(store.findBy(filter)), writer);

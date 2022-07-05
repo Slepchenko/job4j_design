@@ -8,15 +8,17 @@ import java.util.Calendar;
 public class CalendarAdapterXml extends XmlAdapter<String, Calendar> {
 
     private static final ThreadLocal<DateFormat> DATE_FORMAT
-            = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+            = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss X"));
 
     @Override
     public Calendar unmarshal(String s) throws Exception {
-        return null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(DATE_FORMAT.get().parse(s));
+        return cal;
     }
 
     @Override
     public String marshal(Calendar calendar) throws Exception {
-        return null;
+        return DATE_FORMAT.get().format(calendar.getTime());
     }
 }

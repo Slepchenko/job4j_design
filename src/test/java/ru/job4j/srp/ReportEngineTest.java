@@ -10,7 +10,7 @@ import javax.xml.bind.JAXBException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 public class ReportEngineTest {
@@ -107,28 +107,22 @@ public class ReportEngineTest {
         Calendar hired = Calendar.getInstance();
         hired.set(2022, Calendar.APRIL, 8, 0, 0, 0);
         Calendar fired = Calendar.getInstance();
-        fired.set(2022, Calendar.AUGUST, 8, 0, 0, 0);
+        fired.set(2022, Calendar.AUGUST, 7, 0, 0, 0);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss X");
+        String dateHired = formatter.format(hired.getTime());
+        String dateFired = formatter.format(fired.getTime());
         Employee worker = new Employee("Ivan", hired, fired, 100);
         store.add(worker);
-        Date hDate = hired.getTime();
-        Date fDate = fired.getTime();
-        Report json = new JsonSerializationReport(store);
-        StringBuilder expected = new StringBuilder();
-        DateFormat format = new SimpleDateFormat("yyyy");
-        String hYear = format.format(hDate);
-        String fYear = format.format(hDate);
-        expected.append("[{\"name\":\"Ivan\",\"hired\":")
-                .append("{\"year\":").append(hYear).append(",\"month\":")
-                .append(hDate.getMonth()).append(",\"dayOfMonth\":").append(hDate.getDate())
-                .append(",\"hourOfDay\":").append(hDate.getHours()).append(",\"minute\":")
-                .append(hDate.getMinutes()).append(",\"second\":").append(hDate.getSeconds())
-                .append("},\"fired\":{\"year\":").append(fYear).append(",\"month\":")
-                .append(fDate.getMonth()).append(",\"dayOfMonth\":").append(fDate.getDate())
-                .append(",\"hourOfDay\":").append(fDate.getHours()).append(",\"minute\":")
-                .append(fDate.getSeconds()).append(",\"second\":").append(fDate.getSeconds())
-                .append("},\"salary\":").append(worker.getSalary()).append("}]");
-        String result = json.generate(em -> true);
-        assertEquals(result, expected.toString());
+        Report jsonSerializationReport = new JsonSerializationReport(store);
+        String employeeJsonTemplate =
+                "{\"name\":\"%s\",\"hired\":\"%s\",\"fired\":\"%s\",\"salary\":%.1f}";
+        StringBuilder expect = new StringBuilder()
+                .append("{\"employees\":[")
+                .append(String.format(Locale.US, employeeJsonTemplate,
+                        worker.getName(), dateHired, dateFired, worker.getSalary()))
+                .append("]}");
+
+        assertThat(jsonSerializationReport.generate(em -> true), is(expect.toString()));
     }
 
     @Test

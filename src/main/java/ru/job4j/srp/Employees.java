@@ -9,7 +9,6 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Employees {
 
-
     private List<Employee> employees;
 
     public Employees() {
