@@ -68,6 +68,9 @@ class SecondRule {
         workDays.add(LocalDate.of(2020, Month.DECEMBER, 2), 6);
         workDays.add(LocalDate.of(2020, Month.DECEMBER, 3), 7);
 
+        CountingRoom  countingRoom0 = new CountingRoom(21, 500);
+        System.out.println(countingRoom0.pay(workDays));
+
         CountingRoom countingRoom = new ShopCountingRoom(3 * 8, 500);
         System.out.println(countingRoom.pay(workDays));
     }
