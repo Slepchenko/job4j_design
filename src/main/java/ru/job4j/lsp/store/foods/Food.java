@@ -1,14 +1,13 @@
 package ru.job4j.lsp.store.foods;
 
 import java.util.Calendar;
-import java.util.Date;
 
-public class Food {
-    private String name;
-    private Calendar expiryDate;
-    private Calendar createDate;
+public abstract class Food {
+    private final String name;
+    private final Calendar expiryDate;
+    private final Calendar createDate;
     private double price;
-    private int discount;
+    private final int discount;
 
     public Food(String name, Calendar expiryDate, Calendar createDate, double price, int discount) {
         this.name = name;

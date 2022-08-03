@@ -3,29 +3,30 @@ package ru.job4j.lsp.store;
 import ru.job4j.lsp.store.foods.Food;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class Shop implements Store {
-    private List<Food> foods = new ArrayList<>();
+    private final List<Food> foods = new ArrayList<>();
+    private final int minPercent = 25;
+    private final int avgPercent = 75;
+    private final int maxPercent = 100;
 
     @Override
-    public void check(Food food) {
-        Calendar now = Calendar.getInstance();
-        long num1 = food.getExpiryDate().getTimeInMillis() - food.getCreateDate().getTimeInMillis();
-        long num2 = now.getTimeInMillis() - food.getCreateDate().getTimeInMillis();
-        long result = num2 * 100 / num1;
-
-        if (result >= 25 && result < 75) {
+    public boolean check(Food food) {
+        double percentLifeExpired = getPercentLifeExpired(food);
+        if (percentLifeExpired >= minPercent && percentLifeExpired < avgPercent) {
             foods.add(food);
+            return true;
         }
-        if (result >= 75 && result < 100) {
+        if (percentLifeExpired >= avgPercent && percentLifeExpired < maxPercent) {
             food.setPrice(food.getPrice() - food.getDiscount());
             foods.add(food);
+            return true;
         }
+        return false;
     }
 
-    public List<Food> getList() {
-        return foods;
+    public List<Food> getFoods() {
+        return new ArrayList<>(foods);
     }
 }

@@ -4,9 +4,9 @@ import org.junit.Test;
 import ru.job4j.lsp.store.foods.Bread;
 import ru.job4j.lsp.store.foods.Food;
 import ru.job4j.lsp.store.foods.Milk;
-import ru.job4j.lsp.store.foods.Sausage;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -15,67 +15,94 @@ public class ControlQualityTest {
 
     @Test
     public void whenWarehouse() {
-        ControlQuality cq = new ControlQuality();
-        Calendar dateCreate = Calendar.getInstance();
-        dateCreate.set(2022, Calendar.APRIL, 8);
-        Calendar dateExpiry = Calendar.getInstance();
-        dateExpiry.set(2024, Calendar.AUGUST, 7);
-        Food food = new Milk("Milk", dateExpiry, dateCreate, 60, 4);
-        cq.distribute(food);
-        assertThat(cq.getStores().get(2).getList().size(), is(1));
+        Shop shop = new Shop();
+        Warehouse warehouse = new Warehouse();
+        Trash trash = new Trash();
+        ControlQuality controlQuality = new ControlQuality(List.of(
+                shop,
+                warehouse,
+                trash
+        ));
+        Calendar expiryDate = Calendar.getInstance();
+        Calendar createDate = Calendar.getInstance();
+        expiryDate.set(expiryDate.get(Calendar.YEAR) + 2,
+                expiryDate.get(Calendar.MONTH),
+                expiryDate.get(Calendar.DAY_OF_MONTH) + 5, 10, 0);
+        createDate.set(createDate.get(Calendar.YEAR),
+                createDate.get(Calendar.MONTH),
+                createDate.get(Calendar.DAY_OF_MONTH) + 6, 10, 0);
+        Food milk = new Milk("Milk", expiryDate, createDate, 60, 4);
+        controlQuality.distribute(milk);
+        assertThat(warehouse.getFoods(), is(List.of(milk)));
     }
 
     @Test
     public void whenTrash() {
-        ControlQuality cq = new ControlQuality();
-        Calendar dateCreate = Calendar.getInstance();
-        dateCreate.set(2022, Calendar.APRIL, 8);
-        Calendar dateExpiry = Calendar.getInstance();
-        dateExpiry.set(2022, Calendar.JULY, 7);
-        Food food = new Bread("Bread", dateExpiry, dateCreate, 60, 4);
-        cq.distribute(food);
-        assertThat(cq.getStores().get(1).getList().size(), is(1));
+        Shop shop = new Shop();
+        Warehouse warehouse = new Warehouse();
+        Trash trash = new Trash();
+        ControlQuality controlQuality = new ControlQuality(List.of(
+                shop,
+                warehouse,
+                trash
+        ));
+        Calendar expiryDate = Calendar.getInstance();
+        Calendar createDate = Calendar.getInstance();
+        expiryDate.set(expiryDate.get(Calendar.YEAR),
+                expiryDate.get(Calendar.MONTH) - 1,
+                expiryDate.get(Calendar.DAY_OF_MONTH) + 5, 10, 0);
+        createDate.set(createDate.get(Calendar.YEAR),
+                createDate.get(Calendar.MONTH) - 4,
+                createDate.get(Calendar.DAY_OF_MONTH) + 6, 10, 0);
+        Food bread = new Bread("Bread", expiryDate, createDate, 60, 4);
+        controlQuality.distribute(bread);
+        assertThat(trash.getFoods(), is(List.of(bread)));
     }
 
     @Test
     public void whenExpirationDateBetween25And75ToShop() {
-        ControlQuality cq = new ControlQuality();
-        Calendar dateCreate = Calendar.getInstance();
-        dateCreate.set(2022, Calendar.APRIL, 8);
-        Calendar dateExpiry = Calendar.getInstance();
-        dateExpiry.set(2022, Calendar.DECEMBER, 7);
-        Food food = new Bread("Bread", dateExpiry, dateCreate, 60, 4);
-        cq.distribute(food);
-        assertThat(cq.getStores().get(0).getList().size(), is(1));
+        Shop shop = new Shop();
+        Warehouse warehouse = new Warehouse();
+        Trash trash = new Trash();
+        ControlQuality controlQuality = new ControlQuality(List.of(
+                shop,
+                warehouse,
+                trash
+        ));
+        Calendar expiryDate = Calendar.getInstance();
+        Calendar createDate = Calendar.getInstance();
+        expiryDate.set(expiryDate.get(Calendar.YEAR),
+                expiryDate.get(Calendar.MONTH) + 2,
+                expiryDate.get(Calendar.DAY_OF_MONTH) + 5, 10, 0);
+        createDate.set(createDate.get(Calendar.YEAR),
+                createDate.get(Calendar.MONTH) - 4,
+                createDate.get(Calendar.DAY_OF_MONTH) + 6, 10, 0);
+        Food bread = new Bread("Milk", expiryDate, createDate, 60, 4);
+        controlQuality.distribute(bread);
+        assertThat(shop.getFoods(), is(List.of(bread)));
     }
 
     @Test
     public void whenExpirationDateMore75ToShopWithNewPrice() {
-        ControlQuality cq = new ControlQuality();
-        Calendar dateCreate = Calendar.getInstance();
-        dateCreate.set(2022, Calendar.APRIL, 8);
-        Calendar dateExpiry = Calendar.getInstance();
-        dateExpiry.set(2022, Calendar.SEPTEMBER, 7);
-        Food bread = new Bread("Bread", dateExpiry, dateCreate, 60, 4);
-        cq.distribute(bread);
-        double newPrise = cq.getStores().get(0).getList().get(0).getPrice();
-        assertThat(newPrise, is(56.0));
-    }
-
-    @Test
-    public void whenMilkToTrashAndSausageToWarehouse() {
-        ControlQuality cq = new ControlQuality();
-        Calendar dateCreate = Calendar.getInstance();
-        dateCreate.set(2022, Calendar.APRIL, 8);
-        Calendar dateExpiryMilk = Calendar.getInstance();
-        dateExpiryMilk.set(2022, Calendar.JUNE, 7);
-        Calendar dateExpirySausage = Calendar.getInstance();
-        dateExpirySausage.set(2024, Calendar.JUNE, 7);
-        Food milk = new Milk("Milk", dateExpiryMilk, dateCreate, 60, 4);
-        Food sausage = new Sausage("Sausage", dateExpirySausage, dateCreate, 360, 4);
-        cq.distribute(milk);
-        cq.distribute(sausage);
-        assertThat(cq.getStores().get(1).getList().size(), is(1));
-        assertThat(cq.getStores().get(2).getList().size(), is(1));
+        Shop shop = new Shop();
+        Warehouse warehouse = new Warehouse();
+        Trash trash = new Trash();
+        ControlQuality controlQuality = new ControlQuality(List.of(
+                shop,
+                warehouse,
+                trash
+        ));
+        Calendar expiryDate = Calendar.getInstance();
+        Calendar createDate = Calendar.getInstance();
+        expiryDate.set(expiryDate.get(Calendar.YEAR),
+                expiryDate.get(Calendar.MONTH) + 1,
+                expiryDate.get(Calendar.DAY_OF_MONTH) + 5, 10, 0);
+        createDate.set(createDate.get(Calendar.YEAR),
+                createDate.get(Calendar.MONTH) - 4,
+                createDate.get(Calendar.DAY_OF_MONTH) + 6, 10, 0);
+        Food bread = new Bread("Milk", expiryDate, createDate, 60, 4);
+        controlQuality.distribute(bread);
+        double newPrice = shop.getFoods().get(0).getPrice();
+        assertThat(newPrice, is(56.0));
     }
 }
