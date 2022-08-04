@@ -7,12 +7,12 @@ import java.util.List;
 
 public class Warehouse implements Store {
     private final List<Food> foods = new ArrayList<>();
-    private final int percent = 25;
+    private static final int PERCENT = 25;
 
     @Override
     public boolean check(Food food) {
         double percentLifeExpired = getPercentLifeExpired(food);
-        if (percentLifeExpired < percent) {
+        if (percentLifeExpired < PERCENT) {
             foods.add(food);
             return true;
         }

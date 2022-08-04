@@ -9,12 +9,12 @@ import java.util.List;
 public class Trash implements Store {
 
     private final List<Food> foods = new ArrayList<>();
-    private final int percent = 100;
+    private static final int PERCENT = 100;
 
     @Override
     public boolean check(Food food) {
         double percentLifeExpired = getPercentLifeExpired(food);
-        if (percentLifeExpired >= percent) {
+        if (percentLifeExpired >= PERCENT) {
             foods.add(food);
             return true;
         }

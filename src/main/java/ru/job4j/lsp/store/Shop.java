@@ -7,18 +7,18 @@ import java.util.List;
 
 public class Shop implements Store {
     private final List<Food> foods = new ArrayList<>();
-    private final int minPercent = 25;
-    private final int avgPercent = 75;
-    private final int maxPercent = 100;
+    private static final int MIN_PERCENT = 25;
+    private static final int AVG_PERCENT = 75;
+    private static final int MAX_PERCENT = 100;
 
     @Override
     public boolean check(Food food) {
         double percentLifeExpired = getPercentLifeExpired(food);
-        if (percentLifeExpired >= minPercent && percentLifeExpired < avgPercent) {
+        if (percentLifeExpired >= MIN_PERCENT && percentLifeExpired < AVG_PERCENT) {
             foods.add(food);
             return true;
         }
-        if (percentLifeExpired >= avgPercent && percentLifeExpired < maxPercent) {
+        if (percentLifeExpired >= AVG_PERCENT && percentLifeExpired < MAX_PERCENT) {
             food.setPrice(food.getPrice() - food.getDiscount());
             foods.add(food);
             return true;
