@@ -5,24 +5,26 @@ import java.util.Set;
 
 public class GeneralParking implements Parking {
 
-    private Set<Car> passengerParking;
-    private Set<Car> truckParking;
+    private final Set<Car> passengerParking = new HashSet<>();
+    private final Set<Car> truckParking = new HashSet<>();
+    private final int passengerSize;
+    private final int truckSize;
 
     public GeneralParking(int passengerSize, int truckSize) {
-        this.passengerParking = new HashSet<>(passengerSize);
-        this.truckParking = new HashSet<>(truckSize);
+        this.passengerSize = passengerSize;
+        this.truckSize = truckSize;
     }
 
     @Override
-    public boolean add(Car car, String parking) {
+    public boolean add(Car car) {
         return false;
     }
 
     public Set<Car> getPassengerParking() {
-        return passengerParking;
+        return new HashSet<>(passengerParking);
     }
 
     public Set<Car> getTruckParking() {
-        return truckParking;
+        return new HashSet<>(truckParking);
     }
 }

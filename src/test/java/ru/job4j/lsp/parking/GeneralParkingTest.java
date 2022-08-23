@@ -10,71 +10,76 @@ public class GeneralParkingTest {
 
     @Test
     public void whenAddPassengerCarIntoPassengerParking() {
-        Car car = new PassengerCar();
+        Car passenger = new PassengerCar();
         Parking parking = new GeneralParking(5, 5);
-        assertTrue(parking.add(car, "Passenger"));
-    }
-
-    @Test (expected = IllegalArgumentException.class)
-    public void whenAddPassengerCarIntoTruckParkingThenException() {
-        Car car = new PassengerCar();
-        Parking parking = new GeneralParking(5, 5);
-        parking.add(car, "Truck");
+        assertTrue(parking.add(passenger));
     }
 
     @Test
-    public void whenAdd1TruckSize2IntoTruckParking() {
-        Car car = new Truck(2);
+    public void whenAddPassengerCarIntoTruckParking() {
+        Car passenger = new PassengerCar();
         Parking parking = new GeneralParking(5, 5);
-        assertTrue(parking.add(car, "Truck"));
+        assertFalse(parking.add(passenger));
     }
 
-    @Test (expected = Exception.class)
-    public void whenAdd3TruckSize2IntoTruckParkingSize2() {
-        Car car1 = new Truck(2);
-        Car car2 = new Truck(2);
-        Car car3 = new Truck(2);
+    @Test
+    public void whenAdd1TruckSize2IntoTruckParking() throws Exception {
+        Car truck = new Truck(2);
+        Parking parking = new GeneralParking(5, 5);
+        assertTrue(parking.add(truck));
+    }
+
+    @Test
+    public void whenAdd3TruckSize2IntoTruckParkingSize2() throws Exception {
+        Car truck1 = new Truck(2);
+        Car truck2 = new Truck(2);
+        Car truck3 = new Truck(2);
         Parking parking = new GeneralParking(5, 2);
-        parking.add(car1, "Truck");
-        parking.add(car2, "Truck");
-        parking.add(car3, "Truck");
+        parking.add(truck1);
+        parking.add(truck2);
+        assertFalse(parking.add(truck3));
     }
 
     @Test
     public void whenAdd1TruckSize2IntoPassengerParking() {
-        Car car = new PassengerCar();
+        Car passenger = new PassengerCar();
         Parking parking = new GeneralParking(5, 5);
-        assertTrue(parking.add(car, "Passenger"));
+        assertTrue(parking.add(passenger));
     }
 
     @Test (expected = Exception.class)
-    public void whenAdd1PassengerIntoFullPassengerParking() {
-        Car car1 = new PassengerCar();
-        Car car2 = new Truck(2);
-        Car car3 = new PassengerCar();
+    public void whenAdd1PassengerIntoFullPassengerParking() throws Exception {
+        Car passenger1 = new PassengerCar();
+        Car truck = new Truck(2);
+        Car passenger2 = new PassengerCar();
         Parking parking = new GeneralParking(3, 5);
-        parking.add(car1, "Passenger");
-        parking.add(car2, "Passenger");
-        parking.add(car3, "Passenger");
+        parking.add(passenger1);
+        parking.add(truck);
+        assertFalse(parking.add(passenger2));
     }
 
-    @Test (expected = Exception.class)
-    public void whenAdd1TruckSize2And1TruckSize3IntoPassengerParkingSize4ThenException() {
-        Car car1 = new Truck(2);
-        Car car2 = new Truck(3);
+    @Test
+    public void whenAdd1TruckSize2And1TruckSize3IntoPassengerParkingSize4() throws Exception {
+        Car truck1 = new Truck(2);
+        Car truck2 = new Truck(3);
         Parking parking = new GeneralParking(4, 5);
-        parking.add(car1, "Passenger");
-        parking.add(car2, "Passenger");
+        parking.add(truck1);
+        assertFalse(parking.add(truck2));
+    }
+
+    @Test
+    public void whenAdd1PassengerIntoFullPassengerParkingSize5ByTrucks() throws Exception {
+        Car truck1 = new Truck(2);
+        Car truck2 = new Truck(3);
+        Car passenger3 = new PassengerCar();
+        Parking parking = new GeneralParking(5, 5);
+        parking.add(truck1);
+        parking.add(truck2);
+        assertFalse(parking.add(passenger3));
     }
 
     @Test (expected = Exception.class)
-    public void whenAdd1PassengerIntoFullPassengerParkingSize5ByTrucksThenException() {
-        Car car1 = new Truck(2);
-        Car car2 = new Truck(3);
-        Car car3 = new PassengerCar();
-        Parking parking = new GeneralParking(5, 5);
-        parking.add(car1, "Passenger");
-        parking.add(car2, "Passenger");
-        parking.add(car3, "Passenger");
+    public void whenTruckSizeIs1() throws Exception {
+        Car car1 = new Truck(1);
     }
 }
