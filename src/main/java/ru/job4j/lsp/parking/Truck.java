@@ -5,11 +5,12 @@ import java.util.Objects;
 public class Truck implements Car {
 
     private final int size;
-    private final static int VALIDATE_SIZE = 1;
+    private String number;
 
-    public Truck(int size) throws Exception {
-        if (size <= VALIDATE_SIZE) {
-            throw new Exception();
+    public Truck(int size) {
+        Car car = new PassengerCar();
+        if (size <= car.getSize()) {
+            throw new IllegalArgumentException();
         } else {
             this.size = size;
         }
@@ -30,11 +31,11 @@ public class Truck implements Car {
             return false;
         }
         Truck truck = (Truck) o;
-        return size == truck.size;
+        return size == truck.size && Objects.equals(number, truck.number);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(size);
+        return Objects.hash(size, number);
     }
 }
