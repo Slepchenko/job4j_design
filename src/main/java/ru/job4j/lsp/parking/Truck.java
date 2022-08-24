@@ -7,14 +7,13 @@ public class Truck implements Car {
     private final int size;
     private String number;
 
-    public Truck(int size) {
-        Car car = new PassengerCar();
-        if (size <= car.getSize()) {
+    public Truck(int size, String number) {
+        if (size <= PassengerCar.SIZE) {
             throw new IllegalArgumentException();
         } else {
             this.size = size;
         }
-
+        this.number = number;
     }
 
     @Override
