@@ -16,6 +16,10 @@ public class PassengerCar implements Car {
         return SIZE;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

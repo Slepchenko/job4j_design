@@ -21,6 +21,10 @@ public class Truck implements Car {
         return size;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
