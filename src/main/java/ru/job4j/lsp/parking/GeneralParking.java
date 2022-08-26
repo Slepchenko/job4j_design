@@ -7,12 +7,14 @@ public class GeneralParking implements Parking {
 
     private final Set<Car> passengerParking;
     private final Set<Car> truckParking;
-    private int passengerSize;
-    private int truckSize;
+    private final int passengerParkingSize;
+    private final int truckParkingSize;
+    private int passengerSpaces = 0;
+    private int truckSpaces = 0;
 
     public GeneralParking(int passengerSize, int truckSize) {
-        this.passengerSize = passengerSize;
-        this.truckSize = truckSize;
+        this.passengerParkingSize = passengerSize;
+        this.truckParkingSize = truckSize;
         this.passengerParking = new HashSet<>(passengerSize);
         this.truckParking = new HashSet<>(truckSize);
     }
@@ -22,21 +24,26 @@ public class GeneralParking implements Parking {
         if (isContainCar(car)) {
             return false;
         }
-        if (car.getSize() == 1 && passengerSize > 0 && passengerParking.size() < passengerSize) {
+
+        if (car.getSize() == PassengerCar.SIZE && passengerParkingSize > 0
+                && passengerSpaces < passengerParkingSize) {
             passengerParking.add(car);
-            passengerSize -= car.getSize();
+            passengerSpaces++;
+            return true;
+        }
+        if (car.getSize() > PassengerCar.SIZE && truckParkingSize > 0
+                && truckSpaces < truckParkingSize) {
+            truckParking.add(car);
+            truckSpaces++;
+            return true;
+        }
+        if (car.getSize() > PassengerCar.SIZE && passengerParkingSize > 0
+                && (passengerSpaces + car.getSize()) <= passengerParkingSize) {
+            passengerParking.add(car);
+            passengerSpaces += car.getSize();
             return true;
         }
 
-        if (car.getSize() > 1 && car.getSize() <= truckSize) {
-            truckParking.add(car);
-            truckSize -= car.getSize();
-            return true;
-        } else if (car.getSize() <= passengerSize) {
-            passengerParking.add(car);
-            passengerSize -= car.getSize();
-            return true;
-        }
         return false;
     }
 
