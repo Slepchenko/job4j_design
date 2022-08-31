@@ -34,7 +34,7 @@ class NameLoadTest {
         NameLoad nameLoad = new NameLoad();
         assertThatThrownBy(() -> nameLoad.parse("name"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("does not contain the symbol");;
+                .hasMessageContaining("does not contain the symbol");
     }
 
     @Test
@@ -42,7 +42,7 @@ class NameLoadTest {
         NameLoad nameLoad = new NameLoad();
         assertThatThrownBy(() -> nameLoad.parse("=name"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("does not contain a key");;
+                .hasMessageContaining("does not contain a key");
     }
 
     @Test
@@ -50,6 +50,6 @@ class NameLoadTest {
         NameLoad nameLoad = new NameLoad();
         assertThatThrownBy(() -> nameLoad.parse("name="))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("does not contain a value");;
+                .hasMessageContaining("does not contain a value");
     }
 }
