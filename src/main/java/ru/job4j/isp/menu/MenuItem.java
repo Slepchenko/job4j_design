@@ -1,4 +1,4 @@
-package ru.job4j.menu;
+package ru.job4j.isp.menu;
 
 import java.util.List;
 
