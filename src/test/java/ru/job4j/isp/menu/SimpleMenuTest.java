@@ -1,11 +1,12 @@
 package ru.job4j.isp.menu;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-
+@Disabled
 public class SimpleMenuTest {
 
     public static final ActionDelegate STUB_ACTION = System.out::println;
