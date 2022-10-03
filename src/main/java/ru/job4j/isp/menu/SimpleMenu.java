@@ -45,7 +45,6 @@ public class SimpleMenu implements Menu {
             public MenuItemInfo next() {
                 ItemInfo menuItem = iterator.next();
                 return new MenuItemInfo(menuItem.menuItem, menuItem.number);
-
             }
         };
     }
