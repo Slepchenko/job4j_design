@@ -3,61 +3,50 @@ package ru.job4j.isp.menu;
 import java.io.*;
 
 public class TODOApp {
-    public static final ActionDelegate STUB_ACTION =
-            () -> System.out.println("Действие пункта ");
-    private static final Menu MENU = new SimpleMenu();
+    public static final ActionDelegate STUB_ACTION = System.out::println;
+
+    private static final String MENU_ADD = "1";
+    private static final String MENU_SELECT = "2";
+    private static final String MENU_PRINT = "3";
+    private static final String MENU_CLOSE = "4";
+    private static final String MENU = "Введите команду: "
+            + "1.Добавить пункт, 2.Добавить подпункт, 3.Печать, 4.Выход";
+    private static final String ADD_SUBITEM = "Добавить подпункт:";
+    private static final String WRIGHT_NAME = "Введите название пункта:";
+    private static final String SELECT_ITEM = "Введите пункт:";
+
 
     public static void main(String[] args) {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Menu menu = new SimpleMenu();
 
-        try {
-            System.out.println("Выберите команду: 1.добавить, 2.получить, 3.печать, 4.выход");
-            String str = reader.readLine();
-            while (!str.equals("4")) {
-                if (str.equals("1")) {
-                    System.out.println("Добавить пункт");
-                    System.out.print("Введите название пункта:");
-                    str = reader.readLine();
-                   if (findItem(str)) {
-                       System.out.println("Выбран пункт - " + str + ". Введите подпункт");
-                       MENU.add(str, reader.readLine(), STUB_ACTION);
-                   } else {
-                       System.out.println("пункт добавлен");
-                       MENU.add(MENU.ROOT, str, STUB_ACTION);
-                   }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            boolean run = true;
+            while (run) {
+                System.out.println(MENU);
+                String in = reader.readLine();
+                if (in.equals(MENU_ADD)) {
+                    System.out.println(WRIGHT_NAME);
+                    menu.add(menu.ROOT, reader.readLine(), STUB_ACTION);
+                } else if (in.equals(MENU_SELECT)) {
+                    print(menu);
+                    System.out.println(SELECT_ITEM);
+                    in = reader.readLine();
+                    System.out.println(ADD_SUBITEM);
+                    menu.add(in, reader.readLine(), STUB_ACTION);
+                } else if (in.equals(MENU_PRINT)) {
+                    print(menu);
+                } else if (in.equals(MENU_CLOSE)) {
+                    run = false;
                 }
-
-                if (str.equals("2")) {
-                    System.out.println("Выберите пункт:");
-                    print();
-                    MENU.select(reader.readLine()).get().getActionDelegate().delegate();
-                }
-
-                if (str.equals("3")) {
-                   print();
-                }
-                System.out.println("Выберите команду: 1.добавить, 2.получить, 3.печать, 4.выход");
-                str = reader.readLine();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    private static boolean findItem(String name) {
-        for (Menu.MenuItemInfo menu : MENU) {
-            if (menu.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static void print() {
+    private static void print(Menu menu) {
         MenuPrinter menuPrinter = new SimpleMenuPrinter();
-        menuPrinter.print(MENU);
+        menuPrinter.print(menu);
     }
 }
