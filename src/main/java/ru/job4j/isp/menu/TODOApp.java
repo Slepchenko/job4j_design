@@ -12,7 +12,7 @@ public class TODOApp {
     private static final String MENU = "Введите команду: "
             + "1.Добавить пункт, 2.Добавить подпункт, 3.Печать, 4.Выход";
     private static final String ADD_SUBITEM = "Добавить подпункт:";
-    private static final String WRIGHT_NAME = "Введите название пункта:";
+    private static final String WRIT_NAME = "Введите название пункта:";
     private static final String SELECT_ITEM = "Введите пункт:";
 
 
@@ -26,7 +26,7 @@ public class TODOApp {
                 System.out.println(MENU);
                 String in = reader.readLine();
                 if (in.equals(MENU_ADD)) {
-                    System.out.println(WRIGHT_NAME);
+                    System.out.println(WRIT_NAME);
                     menu.add(menu.ROOT, reader.readLine(), STUB_ACTION);
                 } else if (in.equals(MENU_SELECT)) {
                     print(menu);
