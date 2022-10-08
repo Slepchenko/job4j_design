@@ -19,6 +19,7 @@ public class TODOApp {
     public static void main(String[] args) {
 
         Menu menu = new SimpleMenu();
+        MenuPrinter menuPrinter = new SimpleMenuPrinter();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             boolean run = true;
@@ -29,13 +30,13 @@ public class TODOApp {
                     System.out.println(WRIT_NAME);
                     menu.add(menu.ROOT, reader.readLine(), STUB_ACTION);
                 } else if (in.equals(MENU_SELECT)) {
-                    print(menu);
+                    menuPrinter.print(menu);
                     System.out.println(SELECT_ITEM);
                     in = reader.readLine();
                     System.out.println(ADD_SUBITEM);
                     menu.add(in, reader.readLine(), STUB_ACTION);
                 } else if (in.equals(MENU_PRINT)) {
-                    print(menu);
+                    menuPrinter.print(menu);
                 } else if (in.equals(MENU_CLOSE)) {
                     run = false;
                 }
@@ -43,10 +44,5 @@ public class TODOApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void print(Menu menu) {
-        MenuPrinter menuPrinter = new SimpleMenuPrinter();
-        menuPrinter.print(menu);
     }
 }
