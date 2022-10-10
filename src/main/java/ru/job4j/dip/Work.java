@@ -10,7 +10,7 @@ public class Work {
     }
 
     public class Employee {
-        public void main(String[] args) {
+        public void doWork() {
             Work work = new Work();
             work.working();
         }
