@@ -10,8 +10,7 @@ public class Work {
     }
 
     public class Employee {
-        public void doWork() {
-            Work work = new Work();
+        public void doWork(Work work) {
             work.working();
         }
     }
