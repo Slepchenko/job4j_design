@@ -8,6 +8,7 @@ import java.util.List;
 public interface Store {
     boolean check(Food food);
     List<Food> getFoods();
+    void clearFoods();
 
     default double getPercentLifeExpired(Food food) {
         Calendar now = Calendar.getInstance();

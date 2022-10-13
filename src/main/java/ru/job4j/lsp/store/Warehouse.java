@@ -22,4 +22,8 @@ public class Warehouse implements Store {
     public List<Food> getFoods() {
         return new ArrayList<>(foods);
     }
+
+    public void clearFoods() {
+        foods.clear();
+    }
 }
